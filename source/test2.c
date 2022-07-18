@@ -1,38 +1,23 @@
 #include <stdio.h>
-<<<<<<< HEAD
-
-int arr[1000000];
-
-int main(void) {
-
-    int n, i, count = 0;
-    scanf("%d", &n);
-
-
-    for (i = 0; i < n; i++) {
-        scanf("%d", &arr[i]);
-    }
-
-    for (i = 0; i < n - 1; i++) {
-        count = 0;
-        for (int j = 0; j < n; j++) {
-            if (arr[i] > arr[j]) count++;
-        }
-        printf("%d ", count);
-=======
 #include <stdlib.h>
+#include <stdbool.h>
 
+typedef struct bsearchnode {
+    int value;
+    struct bsearchnode *left, *right;
+} Bsearchnode;
 
 int cordinate[1000000] = {0,}; // 전부 저장
 int compressed_cordinate[1000000] = {0,}; // 겹치지 않게 저장 <- 정렬되어야 함
 
-
+bool insertvalue(Bsearchnode **list, int value);
 int comparefunc(const void* p, const void* q);
-void creheap(int *arr2, int key, int input);
 
 int main(void) {
 
     int n, i, j, buffer, compressed_cordinate_index = 0, zero_flag = 0, first = 0, last, mid;
+
+    Bsearchnode *list = NULL;
 
     scanf("%d", &n);
 
@@ -44,19 +29,10 @@ int main(void) {
             zero_flag++;
             compressed_cordinate_index++;
         }
-
-        // 기존에 겹치는 게 있는지 검사
-        for (j = 0; j < compressed_cordinate_index; j++) {
-            if (compressed_cordinate[j] == buffer) {
-                break;
-            }
-        }
-
-        // 겹쳤다면 넣지 않고, 안 겹쳤다면 넣음
-        if (j == compressed_cordinate_index) {
+        
+        if (buffer != 0 && insertvalue(&list, buffer)) {
             compressed_cordinate[compressed_cordinate_index++] = buffer;
         }
-
         
     }
 
@@ -95,29 +71,54 @@ int main(void) {
         }
         printf(" %d", mid);
 
->>>>>>> 56e9fb907e87bb8f1945b7d79c609a778665391e
     }
 
-
-    count = 0;
-    for (int j = 0; j < n; j++) {
-        if (arr[i] > arr[j]) count++;
-    }
-    printf("%d", count);
     return 0;
 }
+
+
+bool insertvalue(Bsearchnode **list, int value) {
+    int i = 1;
+    Bsearchnode *p;
+    Bsearchnode *newnode = (Bsearchnode*) malloc(sizeof(Bsearchnode));
+    newnode->value = value;
+    newnode->left = NULL;
+    newnode->right = NULL;
+
+    if (*list == NULL) {
+        *list = newnode;
+        return true;
+    }
+
+    p = *list;
+
+    while (true) {
+
+        if (p->value == value) {
+            return false;
+        } else if (p->value < value) {
+            if (p->right == NULL) {
+                p->right = newnode;
+                return true;
+            } else {
+                p = p->right;
+            }
+        } else {
+            if (p->left == NULL) {
+                p->left = newnode;
+                return true;
+            } else {
+                p = p->left;
+            }
+        }
+    }
+    
+}
+
+
+
 
 int comparefunc(const void* p, const void* q) {
     return *(int*)p - *(int*)q;
 }
 
-void creheap(int *arr2, int key, int input) {
-	arr2[key] = input;
-	while (key > 1) {
-		if (arr2[key] < arr2[key / 2]) {
-			swap(arr2[key], arr2[key / 2]);
-			key /= 2;
-		}
-		else break;
-	}
-}

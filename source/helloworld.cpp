@@ -1,17 +1,12 @@
-/*
-    File: hello-world.cpp
-    Build opts:
-      - /MT -> Library Static Linking
-      - /DYNAMICBASE:NO -> Disable ASLR
-      - /od -> Disable Optimization
-*/
-#include <Windows.h>
-#include <stdio.h>
-char* str;
-int main() {
-  int delay = 1000;
-  Sleep(delay);  // 1000ms(1초)를 대기합니다.
-  str = (char*)"Hello, world!\n";
-  printf(str);
-  return 0;
+#include <iostream>
+
+using namespace std;
+
+int main(void) {
+
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+
+    return 0;
 }
